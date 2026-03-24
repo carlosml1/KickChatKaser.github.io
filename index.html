@@ -83,7 +83,7 @@ function loginKick(){
   const clientId = "TU_CLIENT_ID_REAL";
   const redirect = encodeURIComponent("https://carlosml1.github.io/KickChatKaser.github.io/");
 
-  const url = `https://id.kick.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirect}&scope=user:read`;
+  const url = `https://kick.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirect}&scope=user:read`;
 
   window.location.href = url;
 }
@@ -387,7 +387,7 @@ const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
 
 if(code){
-  fetch(`http://localhost:3000/token?code=${code}`)
+  fetch(`https://kick-backend.onrender.com/token?code=${code}`)
     .then(res => res.json())
     .then(data => {
       console.log("TOKEN:", data);
