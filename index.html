@@ -48,6 +48,7 @@ button { margin-left:5px; }
 <span>Chat</span>
 <span class="settings" onclick="changeName()">⚙️</span>
 <span class="settings" id="adminToggle" style="margin-left:10px; display:none;" onclick="toggleAdminChat()">🛡️</span>
+<span class="settings" onclick="loginKick()">🔐</span>
 </div>
 
 <div id="chat" class="chat-messages"></div>
@@ -76,6 +77,15 @@ function getRoleIcon(role){
     case "vip": return "💎";
     default: return "";
   }
+}
+
+function loginKick(){
+  const clientId = "TU_CLIENT_ID_REAL";
+  const redirect = encodeURIComponent("https://carlosml1.github.io/KickChatKaser.github.io/");
+
+  const url = `https://id.kick.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirect}&scope=user:read`;
+
+  window.location.href = url;
 }
 
 // ================= USERS =================
@@ -369,6 +379,32 @@ function sendImageMessage(src){
 
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
+}
+
+// ================= OAUTH RESPONSE =================
+
+const params = new URLSearchParams(window.location.search);
+const code = params.get("code");
+
+if(code){
+  fetch(`http://localhost:3000/token?code=${code}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("TOKEN:", data);
+
+      // guardar token
+      localStorage.setItem("kickToken", data.access_token);
+
+      // 🔥 aquí simulamos login real
+      if(data.access_token){
+        username = "KickUser"; // temporal
+        localStorage.setItem("username", username);
+
+        alert("Login con Kick completado 🚀");
+      }
+    });
+
+  window.history.replaceState({}, document.title, window.location.pathname);
 }
 
 </script>
